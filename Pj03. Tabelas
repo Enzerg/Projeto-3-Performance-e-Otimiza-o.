@@ -1,0 +1,63 @@
+create table cliente (
+
+id integer generated always as identity primary key,
+nome varchar(100) not null,
+cpf varchar (11) not null unique,
+email varchar(100) not null unique 
+
+);
+
+create table produto(
+
+id integer generated always as identity primary key,
+nome varchar(100) not null,
+categoria varchar(50) not null,
+preco numeric (10, 2) not null
+
+constraint chk_produto_preco
+check (preco >= 0)
+
+);
+
+create table pedidos (
+
+id integer generated always as identity primary key,
+cliente_id integer not null,
+data timestamp not null default current_timestamp,
+status varchar (20) not null,
+
+constraint fk_cliente
+foreign key (cliente_id)
+references cliente(id),
+
+constraint chk_status
+check (status in ('PENDENTE', 'PAGA','CANCELADA'))
+
+);
+
+create table itens_pedido(
+
+id integer generated always as identity primary key,
+pedidos_id integer not null,
+produto_id integer not null,
+quantidade integer not null,
+preco_unitario numeric (10,2) not null,
+
+constraint uq_pedido_produto
+unique (pedidos_id, produto_id),
+
+constraint fk_pedidos
+foreign key (pedidos_id)
+references pedidos(id),
+
+constraint fk_produto
+foreign key (produto_id)
+references produto(id),
+
+constraint chk_quantidade
+check (quantidade >=0),
+
+constraint chk_preco_unitario
+check (preco_unitario >= 0)
+
+);
