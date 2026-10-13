@@ -1,0 +1,15 @@
+insert into cliente (nome, cpf, email)
+
+select 
+	'Cliente' || n ,
+	lpad(n::text, 11 , '0'),
+	'cliente' || n  || '@email.com'
+from generate_series(1, 10000) as n;
+
+insert into produto (nome, categoria, preco)
+
+select 
+ 'Produto'|| p,
+ 'Categoria' || (p % 10 + 1),
+ (p % 1000) + 1
+ from generate_series(1, 50000) as p;
